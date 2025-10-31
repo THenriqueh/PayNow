@@ -1,11 +1,15 @@
 package paynow.example.paynow.dto;
 
-public record UserDTO(
+import paynow.example.paynow.domain.user.UserType;
+
+import java.math.BigDecimal;
+
+public record UserDTO(Long id,
                       String firstName,
                       String lastName,
                       String document,
                       String email,
                       String password,
-                      String userType,
-                      String balance) {
+                      UserType userType,
+                      BigDecimal balance) {
 }
