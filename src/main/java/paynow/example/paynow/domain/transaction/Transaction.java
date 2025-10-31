@@ -1,10 +1,7 @@
 package paynow.example.paynow.domain.transaction;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import paynow.example.paynow.domain.user.User;
 
 import java.math.BigDecimal;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "transactions")
 @Table(name = "transactions")
 @EqualsAndHashCode(of = "id")
