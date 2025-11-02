@@ -18,13 +18,17 @@ import java.util.Map;
 public class TransactionService {
     @Autowired
     private UserService userService;
+
     @Autowired
     private TransactionRepository transactionRepository;
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private RestTemplate restTemplate;
 
-    public void createTransaction(TransactionDTO transaction) throws Exception {
+    public Transaction createTransaction(TransactionDTO transaction) throws Exception {
         User sender = this.userService.findUserById(transaction.senderId());
         User receiver = this.userService.findUserById(transaction.receiverId());
 
@@ -48,17 +52,21 @@ public class TransactionService {
         userService.saveUser(sender);
         userService.saveUser(receiver);
 
+    this.notificationService.sendNotification(sender, "Transaction of " + transaction.value() + " sent to " + receiver.getFirstName() + " " + receiver.getLastName() + "Successfully.");
+    this.notificationService.sendNotification(receiver, "Transaction of " + transaction.value() + " received from " + sender.getFirstName() + " " + sender.getLastName() + " Successfully.");
+
+        return newTransaction;
     }
 
     public boolean authorizeTransaction(User sender, BigDecimal value) {
-        String url = "https://util.devi.tools/api/v2/authorize";
-        ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity(url, Map.class);
-        if (authorizationResponse.getStatusCode()== HttpStatus.OK){
-            String message = (String) authorizationResponse.getBody().get("message");
-            return "Autorizado".equalsIgnoreCase(message);
-        }else return false;
+        ResponseEntity<Map> authorizationResponse = restTemplate.getForEntity("https://util.devi.tools/api/v2/authorize", Map.class);
+        if (authorizationResponse.getStatusCode() == HttpStatus.OK && authorizationResponse.getBody() != null) {
+            Map data = (Map) authorizationResponse.getBody().get("data");
+            return (boolean) data.get("authorization");
+        }
+         else return false;
     }
-    }
+}
 
 
 
