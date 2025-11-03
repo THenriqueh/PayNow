@@ -19,13 +19,6 @@ public class NotificationService {
 
        NotificationDTO notificationRequest = new NotificationDTO(email, message);
 
-      /*ResponseEntity<String> notificationResponse = restTemplate.postForEntity(
-              "https://util.devi.tools/api/v2/notify", notificationRequest, String.class);
-
-       if(!(notificationResponse.getStatusCode() == HttpStatus.OK)){
-           throw new Exception("Notification Service out of service");
-       }
-       */
         System.out.println("Notification sent to user" );
 
     }
